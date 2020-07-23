@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Util util = Util.getUtil();
-    private Connection connection = util.getConnection();
+    private Connection connection = Util.getUtil().getConnection();
 
     public UserDaoJDBCImpl() {
 
@@ -18,7 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement pst = util.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS users" +
+            PreparedStatement pst = connection.prepareStatement("CREATE TABLE IF NOT EXISTS users" +
                     "(id int auto_increment not null key ,name VARCHAR(40) not null " +
                     ", lastName varchar(50)not null, " + " age int not null)");
             pst.execute();
@@ -37,7 +36,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement pst = util.getConnection()
+            PreparedStatement pst = connection
                     .prepareStatement("drop table if exists users");
             pst.execute();
             connection.commit();
@@ -55,7 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement pst = util.getConnection()
+            PreparedStatement pst = connection
                     .prepareStatement("insert into users ( name,lastName,age) " +
                             "VALUES (?,?,?) ");
             pst.setString(1, name);
@@ -79,7 +78,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement pst = util.getConnection()
+            PreparedStatement pst = connection
                     .prepareStatement("delete from users where id = (?)");
             pst.setLong(1, id);
             pst.execute();
@@ -99,7 +98,7 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> userList = new ArrayList<>();
         try {
             connection.setAutoCommit(false);
-            Statement statement = util.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * from users");
             while (resultSet.next()) {
                 long id = resultSet.getLong(1);
@@ -125,7 +124,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement pst = util.getConnection().prepareStatement("delete from users");
+            PreparedStatement pst = connection.prepareStatement("delete from users");
             pst.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
