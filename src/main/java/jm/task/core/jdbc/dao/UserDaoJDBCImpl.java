@@ -22,6 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
                     ", lastName varchar(50)not null, " + " age int not null)");
             pst.execute();
             connection.commit();
+            pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             try {
@@ -30,7 +31,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void dropUsersTable() {
@@ -40,6 +40,7 @@ public class UserDaoJDBCImpl implements UserDao {
                     .prepareStatement("drop table if exists users");
             pst.execute();
             connection.commit();
+            pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             try {
@@ -64,6 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("User именем - " + name + " добавлен в базу данных");
             User user = new User();
             connection.commit();
+            pst.close();
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -83,6 +85,7 @@ public class UserDaoJDBCImpl implements UserDao {
             pst.setLong(1, id);
             pst.execute();
             connection.commit();
+            pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             try {
@@ -109,6 +112,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 userList.add(user);
                 connection.commit();
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             try {
@@ -126,6 +131,8 @@ public class UserDaoJDBCImpl implements UserDao {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection.prepareStatement("delete from users");
             pst.execute();
+            connection.commit();
+            pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             try {
