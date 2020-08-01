@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void createUsersTable() {
+    public void createUsersTable()  {
         try {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection.prepareStatement("CREATE TABLE IF NOT EXISTS users" +
@@ -23,13 +24,14 @@ public class UserDaoJDBCImpl implements UserDao {
             pst.execute();
             connection.commit();
             pst.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
+            e.printStackTrace();
+
         }
     }
 
@@ -49,10 +51,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 e.printStackTrace();
             }
         }
-
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age)  {
         try {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection
@@ -74,7 +75,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 throwables.printStackTrace();
             }
         }
-
     }
 
     public void removeUserById(long id) {
@@ -94,7 +94,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 e.printStackTrace();
             }
         }
-
     }
 
     public List<User> getAllUsers() {
@@ -133,15 +132,13 @@ public class UserDaoJDBCImpl implements UserDao {
             pst.execute();
             connection.commit();
             pst.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (Exception e) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         }
     }
-
 }
 
