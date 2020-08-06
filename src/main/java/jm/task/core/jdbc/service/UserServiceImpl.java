@@ -8,64 +8,79 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.SessionFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private static UserServiceImpl userService;
-    private SessionFactory sessionFactory;
-    private UserDaoHibernateImpl userDaoHibernate;
+    private UserDao userDao;
 
 
-    public UserServiceImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    private UserServiceImpl() {
+         userDao = new UserDaoHibernateImpl(Util.getSessionFactory());
     }
 
-    public UserServiceImpl() {
 
-    }
-
-    public static UserServiceImpl getUserService() {
+    private static UserServiceImpl getUserService() {
         if (userService == null) {
-            userService = new UserServiceImpl(Util.getSessionFactory());
+            userService = new UserServiceImpl();
         }
         return userService;
     }
 
-    UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
 
-    private UserDaoHibernateImpl getUserDao() {
-        if (userDaoHibernate == null) {
-            userDaoHibernate = new UserDaoHibernateImpl(sessionFactory.openSession());
-      } else userDaoHibernate.setSession(sessionFactory.openSession());
-        return userDaoHibernate;
-    }
 
     public void createUsersTable() {
-        getUserDao().createUsersTable();
+        try {
+            userDao.createUsersTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void dropUsersTable() {
-        getUserDao().dropUsersTable();
+        try {
+            userDao.dropUsersTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void saveUser(String name, String lastName, byte age) {
-       getUserDao().saveUser(name, lastName, age);
+        try {
+            userDao.saveUser(name, lastName, age);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void removeUserById(long id) {
-        getUserDao().removeUserById(id);
+        try {
+            userDao.removeUserById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public List<User> getAllUsers() {
-        return getUserDao().getAllUsers();
+        try {
+            return userDao.getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void cleanUsersTable() {
-        getUserDao().cleanUsersTable();
+        try {
+            userDao.cleanUsersTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }

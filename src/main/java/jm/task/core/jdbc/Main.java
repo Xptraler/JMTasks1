@@ -19,7 +19,7 @@ public class Main {
         UserServiceImpl.getUserService().saveUser("Max", "Max", (byte) 25);
         UserServiceImpl.getUserService().getAllUsers();
         UserServiceImpl.getUserService().cleanUsersTable();
-        UserServiceImpl.getUserService().dropUsersTable();
+        //UserServiceImpl.getUserService().dropUsersTable();
 
 
     }
